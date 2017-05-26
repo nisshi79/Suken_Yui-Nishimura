@@ -106,9 +106,11 @@ class CSGame :public CScene {
 	Shield shield;
 	Graph block[3];
 	int map[16][12];
-
+	int brx;
+	int bry;
 	void Start();
-	
+	int ix;
+	int iy;
 	void Loop();
 	
 	void Draw();

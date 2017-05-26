@@ -24,6 +24,8 @@ void CSGame::Start() {
 			map[i][k] = mce.Get(mce.layer.A, i, k);
 		}
 	}
+	/*brx = x + 25;
+	bry = y + 25;*/
 }
 
 void CSGame::Loop() {
@@ -51,13 +53,11 @@ void CSGame::Loop() {
 	if (vx<0 && y+50>0) {
 		vx += fric_a;
 	}
-
 	
 	//Wall
 	if(x<0){
 		x=0;
-	}
-	
+	}	
 	
 	//Floor
 	if (y+50>=600) {
@@ -66,12 +66,9 @@ void CSGame::Loop() {
 	}else{
 		vy+=1;
 	}
-	
-	
 
-	
 	//Bullet
-	kbt = 0;
+	/*kbt = 0;
 	
 	kbt = GetRand(40);
 		
@@ -89,14 +86,13 @@ void CSGame::Loop() {
 			}
 			
 		}
-	}
+	}*/
 	Rect buff = shield.rect();
 	//BulletShield
 	for (int i = 0; i != 10; ++i) {
 		if (killer.b[i].x + killer.b[i].width <= buff.right && killer.b[i].y + killer.b[i].hight >= buff.top) {
 			killer.b[i].flag=false;
 			killer.b[i].x = bullet.x;
-			
 		}
 	}
 	for(int i=0;i!=10;++i){
@@ -105,32 +101,52 @@ void CSGame::Loop() {
 				Game.FlipScene(new CSOver(),Flip::ROTATION_UP);
 		}
 	}
-
-	//mudstop
-	for (int i = 0; i != 16; ++i) {
-		for (int k = 0; k != 12; ++k) {
-			if (map[static_cast<int>(x)/50][y/50]!=1) {
-				//Move&Jump
-				if (Input.GetKeyDown(Input.key.RIGHT)) {
-					vx = 5;
-				}
-				if (Input.GetKeyDown(Input.key.LEFT)) {
-					vx = -5;
-				}
-				if (Input.GetKeyEnter(Input.key.UP) && y == 550) {
-					vy = -20;
-				}
+	
+	
+	//Move&Jump
 				
+	if (Input.GetKeyDown(Input.key.RIGHT)) {
+		vx = 5;
+	}
+	if (Input.GetKeyDown(Input.key.LEFT)) {
+		vx = -5;
+	}
+	if (Input.GetKeyEnter(Input.key.UP) && y == 550 || map[static_cast<int>(x)/50][y/50+1]==1) {
+		vy = -20;
+	}
+	//mudstop
+	/*if (map[static_cast<int>(x) / 50 +1][y/ 50] == 1) {
+		vx=0 ;
+		
+	}*/
+	int tx = x - static_cast<int>(x) % 50;
+	if (map[static_cast<int>(x) / 50+1][y / 50] == 1 && static_cast<int>(x) %50<x+50 && !Input.GetKeyDown(Input.key.LEFT)) {
+		vx = 0;
+		x = x / 50 * 50;
+	}
+	if (map[static_cast<int>(x) / 50][y / 50] == 1 && x/50 * 50+50 > x && !Input.GetKeyDown(Input.key.RIGHT)) {
+		vx = 0;
+		x = x / 50 * 50;
+	}
+	if (map[static_cast<int>(x) / 50][y / 50 + 1] == 1 && y / 50 * 50 < y) {
+		vy = 0;
+		y = y / 50 * 50;
+	}
+	/*for (int i = 0; i != 16; ++i) {
+		for (int k = 0; k != 12; ++k) {
+			if (map[static_cast<int>(x)/50+1][y/50+1]!=1) {
+						}else{
+
 			}
 		}
-	}
+	}*/
 }
 
 void CSGame::Draw() {
 	
 	
 
-	//Me
+	//Soldier
 	DrawBox(x,y,x+50,y+50,RED,true);
 
 
