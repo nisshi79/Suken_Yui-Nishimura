@@ -10,8 +10,9 @@ class CSTitle :public CScene {
 	
 	void End();
 };
-
-
+struct Int2 {
+	int x, y;
+};
 struct Rect {
 	float left, right, top, bottom;
 	Rect(float left, float right, float top, float bottom) {
@@ -33,9 +34,7 @@ struct Rect {
 	}
 };
 
-
 void DrawBox(Rect size, int color, bool fill_flag);
-
 
 struct Bullet {
 	int x, y, vx;
@@ -45,7 +44,7 @@ struct Bullet {
 	Bullet(int left, int top) :size(left, left + width, top, top + hight) {}
 	Bullet() {}
 	void Draw() {
-		DrawBox(size.Add(x,y), BLACK, true);
+		/*DrawBox(size.Add(x,y), BLACK, true);*/
 	}
 	void Set(int x,int y) {
 		this->x = x;
@@ -54,10 +53,9 @@ struct Bullet {
 	}
 };
 
-
 struct Killer{
 	int x, y;
-	int graph = LoadGraph("pic/k.png");
+	/*int graph = LoadGraph("pic/k.png");*/
 	Bullet b[10];
 	const Rect size;
 	Killer(int x,int y):size(0,50,0,300),x(x),y(y){}
@@ -71,14 +69,13 @@ struct Killer{
 	}
 };
 
-
 struct Shield {
 	int x, y;
 	const Rect size;
 	Shield(int x, int y):size(0,30,0,55),x(x),y(y){}
 	Shield():size(0,30,0,55){}
 	void Draw() {
-		DrawBox(size.Add(x, y), BLACK, true);
+		/*DrawBox(size.Add(x, y), BLACK, true);*/
 	}
 	void Set(int x,int y){
 		this->x = x;
@@ -86,11 +83,50 @@ struct Shield {
 		size.Add(x, y);
 	}
 	Rect rect() {
-		return size.Add(x, y);
+		return size.Add(x,y);
 	} 
 };
 
+struct Soldier {
+	int x, y;
+	const Rect size;
+	Soldier(int x,int y):size(0,50,0,50),x(x),y(y){}
+	Soldier():size(0,50,0,50){}
+		void Draw(){
+			DrawBox(x, y, x + 50, y + 50, RED, true);
+	}
+	void Set(int x, int y) {
+		this->x=x;
+		this->y=y;
+		size.Add(x, y);
+	}
+	Rect rect(){
+		size.Add(x,y);
+	}
+};
 
+struct RectFlag {
+	bool left, right, top, bottom;
+	RectFlag() {
+		left = false;
+		right = false;
+		top = false;
+		bottom = false;
+	}
+	RectFlag(bool init) {
+		left = init;
+		right = init;
+		top = init;
+		bottom = init;
+	}
+	void Set(bool init) {
+		left = init;
+		right = init;
+		top = init;
+		bottom = init;
+	}
+};
+		
 
 class CSGame :public CScene {
 	float x;
@@ -111,6 +147,10 @@ class CSGame :public CScene {
 	void Start();
 	int ix;
 	int iy;
+	Soldier soldier;
+	bool jumpFlag;
+	Rect j, r;
+
 	void Loop();
 	
 	void Draw();
