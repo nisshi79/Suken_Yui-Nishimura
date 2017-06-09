@@ -55,13 +55,13 @@ struct Bullet {
 
 struct Killer{
 	int x, y;
-	/*int graph = LoadGraph("pic/k.png");*/
+	Graph graph = "pic/tallet.png";
 	Bullet b[10];
 	const Rect size;
 	Killer(int x,int y):size(0,50,0,300),x(x),y(y){}
 	Killer():size(0, 50, 0, 300) {}
 	void Draw() {
-	//	DrawGraph(700,300/*size.Add(x,y)*/,graph,TRUE);
+		graph(700,400-15-20);
 	}
 	void Set(int x, int y) {
 		this->x = x;
@@ -87,23 +87,23 @@ struct Shield {
 	} 
 };
 
-struct Soldier {
-	int x, y;
-	const Rect size;
-	Soldier(int x,int y):size(0,50,0,50),x(x),y(y){}
-	Soldier():size(0,50,0,50){}
-		void Draw(){
-			DrawBox(x, y, x + 50, y + 50, RED, true);
-	}
-	void Set(int x, int y) {
-		this->x=x;
-		this->y=y;
-		size.Add(x, y);
-	}
-	Rect rect(){
-		size.Add(x,y);
-	}
-};
+//struct Soldier {
+//	int x, y;
+//	const Rect size;
+//	Soldier(int x,int y):size(0,50,0,50),x(x),y(y){}
+//	Soldier():size(0,50,0,50){}
+//		void Draw(){
+//			DrawGraph(x, y, soldierGraph, true);
+//	}
+//	void Set(int x, int y) {
+//		this->x=x;
+//		this->y=y;
+//		size.Add(x, y);
+//	}
+//	Rect rect(){
+//		size.Add(x,y);
+//	}
+//};
 
 struct RectFlag {
 	bool left, right, top, bottom;
@@ -130,9 +130,9 @@ struct RectFlag {
 
 class CSGame :public CScene {
 	float x;
-	int y;
+	float y;
 	float vx;
-	int vy;
+	float vy;
 	int kbt;
 	Killer killer;
 	int vxk;
@@ -141,13 +141,15 @@ class CSGame :public CScene {
 	Bullet bullet;
 	Shield shield;
 	Graph block[3];
+	Graph soldierGraph,bulletGraph;
 	int map[16][12];
 	int brx;
 	int bry;
 	void Start();
 	int ix;
 	int iy;
-	Soldier soldier;
+	bool landFlag;
+
 	bool jumpFlag;
 	Rect j, r;
 

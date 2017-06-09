@@ -1,13 +1,18 @@
 #include "MyScene.h"
 #include <stdlib.h>
+
+const float accel = 0.5;
+const int veloMax = 3;
+const int dushMax = 6;
+
 bool HitRectRect(const Rect& r1, const Rect& r2) {
 	return r1.right > r2.left && r2.right > r1.left && r1.bottom > r2.top && r2.bottom > r1.top;
 }
 void DrawBox(const Rect& rect, int color, bool fillFlag = true) {
 	DrawBox(rect.left, rect.top, rect.right, rect.bottom, color, fillFlag);
 }
-RectFlag HitMRectRect(int& x, int& y, int& vx, int& vy, const Rect& r1, const Rect& r2, const RectFlag& enable = RectFlag(true), RectFlag& flag = RectFlag()) {//速度は足し合わせた後を想定
-	Vector2D vec = { static_cast<float>(x),static_cast<float>(y) };
+RectFlag HitMRectRect(float& x, float& y, float& vx, float& vy, const Rect& r1, const Rect& r2, const RectFlag& enable = RectFlag(true), RectFlag& flag = RectFlag()) {//速度は足し合わせた後を想定
+	Vector2D vec = { x,static_cast<float>(y) };
 
 	if (HitRectRect(r1.Add(vec.x,vec.y), r2)) {
 		vec.x -= vx;
@@ -41,25 +46,21 @@ void DrawBox(Rect size, int color, bool fill_flag){
 	DrawBox(size.left, size.top, size.right, size.bottom, color, fill_flag);
 }
 void CSGame::Start() {	
-	x = 0;
-	y = 0;
+	x = 75;
+	y = 500;
 	vx = 0;
 	vy = 0;
-	j.left = 0;
-	j.right = 50;
-	j.top = 0;
-	j.bottom = 50;
+	j.Set(10, 40, 0, 50);
 	jumpFlag = false;
-
-	r = { 300,400,440,480 };
+	landFlag = true;
 
 	/*debug.Regist("x", &x);
 	debug.Regist("y", &y);
 	debug.Regist("vx", &vx);
 	debug.Regist("vy", &vy);*/
 	SetBackGround("pic/BackGround.png");
-	soldier.Set(125,550);
-	
+	bulletGraph = "pic/wood.png";
+	soldierGraph = "pic/soldier_2.png";
 	fric=1.2;
 	fric_a=0.3;
 	for(int i=0;i!=10;++i){
@@ -69,6 +70,8 @@ void CSGame::Start() {
 	bullet.Set(killer.x, killer.y);
 	shield.Set(300, 600 - 55);
 	LoadDivGraph("pic/blocks.png",3,3,1,50,50,block);
+
+
 	MCE mce("MCE/Map.mce");
 	for (int i = 0; i != 16; ++i) {
 		for(int k=0;k!=12;++k){
@@ -80,19 +83,27 @@ void CSGame::Start() {
 }
 
 void CSGame::Loop() {
+
 	//Move&Jump
-	if (Input.GetKeyDown(Input.key.RIGHT)) {
-		vx = 5;
+	if (Input.GetKeyDown(Input.key.RIGHT)||Input.GetKeyDown(Input.key.D)) {
+		vx += accel;
+		if (vx < 0) {
+			vx += accel;
+		}
 	}
-	if (Input.GetKeyDown(Input.key.LEFT)) {
-		vx = -5;
+	if (Input.GetKeyDown(Input.key.LEFT)||Input.GetKeyDown(Input.key.A)){
+		vx -= accel;
+		if (vx > 0) {
+			vx -= accel;
+		}
 	}
-	if (Input.GetKeyEnter(Input.key.UP) && (soldier.y == 550 || map[static_cast<int>(soldier.x) / 50][soldier.y / 50 + 1] == 1)) {
-		vy = -20;
+	
+	if ((Input.GetKeyEnter(Input.key.W)||Input.GetKeyEnter(Input.key.UP)) && landFlag) {
+		vy = -10;
 	}
 	//Speed
-	soldier.x+=vx;
-	soldier.y+=vy;
+	x+=vx;
+	y+=vy;
 	//for (int i = 0; i != 10; ++i) {
 	//	RectFlag f = { true,true,true,true };
 	//	if (i != 0) {
@@ -103,57 +114,92 @@ void CSGame::Loop() {
 	//	}
 	//	HitMRectRect(x, y, vx, vy, j, b[i], f);
 	//}
-	RectFlag buf;
 	
-	
-	int tvx = static_cast<int>(vx);
-	HitMRectRect(soldier.x, y, tvx, vy, j, r, RectFlag(true), buf);
-	
+	//blocks
+	RectFlag buf(false);
+	RectFlag enable(true);
+	for (int i = 0; i != 16; ++i) {
+		for (int k = 0; k != 12; ++k) {
+			if (map[i][k] == 1) {
+				r = { static_cast<float>(i) * 50,static_cast<float>(i) * 50 + 50,static_cast<float>(k) * 50,static_cast<float>(k) * 50 + 50 };
+				enable.Set(true);
+				if (map[i-1][k]==1) {
+					enable.left = false;
+				}
+				if (map[i + 1][k]==1) {
+					enable.right = false;
+				}
+				if (map[i][k - 1] == 1) {
+					enable.top = false;
+				}
+				if (map[i][k + 1] == 1) {
+					enable.bottom=false;
+				}
+			}
+			HitMRectRect(x,y, vx, vy, j, r, enable, buf);
+		}
+	}
 
+	landFlag = buf.bottom;
+
+
+	
 	//Fric
-	if (vx > 0 && (y + 50 == 600 || map[static_cast<int>(soldier.x) / 50][y / 50 + 1] == 1)) {
-		vx-=fric;
-		if (vx-fric<=0) {
-			vx=0;
+	//On The Ground
+	if (landFlag) {
+		if (!Input.GetKeyDown(Input.key.RIGHT) && !Input.GetKeyDown(Input.key.LEFT)) {
+			if (vx > 0) {
+				vx -= accel;
+				if (vx < 0)
+					vx = 0;
+			}
+			if (vx < 0) {
+				vx += accel;
+				if (vx > 0)
+					vx = 0;
+			}
 		}
 	}
-	if (vx < 0 && (y + 50 == 600 || map[static_cast<int>(soldier.x) / 50][y / 50 + 1] == 1)) {
-		vx+=fric;
-		if (vx+fric>=0) {
-			vx=0;
-		}
+	
+	{
+		int max = Input.GetKeyDown(Input.key.Z) ? dushMax : veloMax;
+		if (vx > max)
+			vx = max;
+		if (vx < -max)
+			vx = -max;
 	}
-	if (vx>0 && soldier.y+50>0) {
+	//Air
+	/*if (vx>0 && y+50>0) {
 		vx -= fric_a;
 	}
-	if (vx<0 && soldier.y+50>0) {
+	if (vx<0 && y+50>0) {
 		vx += fric_a;
-	}
+	}*/
+	
 	
 	//Wall
-	if(soldier.x<0){
-		x=0;
+	if(x<0){
+		x= 0;
 	}	
 	
 	//Floor
-	if (soldier.y + 50 >= 600) {
-		soldier.y=550;
+	if (y + 50 >= 600) {
+		y=550;
 		vy=0;
 	}else{
 		vy+=1;
 	}
 
 	//Bullet
-	/*kbt = 0;
-	
-	kbt = GetRand(40);
+	kbt = 0;
+	kbt = GetRand(20);
 		
 	if(kbt==1){
 		for(int i=0;i!=10;++i){
 			if(killer.b[i].flag==false){
 				killer.b[i].x=bullet.x;
-				killer.b[i].y = GetRand(300-15) + 300-15;
-				killer.b[i].vx=-10;
+				killer.b[i].y = 600 - 200-15;/*GetRand(150)+(600 - 200 - 20-150);*/
+				killer.b[i].vx=-3;
 				killer.b[i].flag=true;
 				break;
 			}
@@ -162,7 +208,7 @@ void CSGame::Loop() {
 			}
 			
 		}
-	}*/
+	}
 	Rect buff = shield.rect();
 	//BulletShield
 	for (int i = 0; i != 10; ++i) {
@@ -174,7 +220,8 @@ void CSGame::Loop() {
 	for(int i=0;i!=10;++i){
 		killer.b[i].x+=killer.b[i].vx;
 		if(x+50>=killer.b[i].x && x <=killer.b[i].x+killer.b[i].width &&y+50>=killer.b[i].y && y<=killer.b[i].y+killer.b[i].hight && killer.b[i].flag == true){
-				Game.FlipScene(new CSOver(),Flip::ROTATION_UP);
+			x = 75;
+			y = 500;
 		}
 	}
 	
@@ -185,7 +232,7 @@ void CSGame::Loop() {
 		vx=0 ;
 		
 	}*/
-	int tx = x - static_cast<int>(x) % 50;
+	/*int tx = x - static_cast<int>(x) % 50;
 	if (map[static_cast<int>(x) / 50+1][y / 50] == 1 && static_cast<int>(x) %50<x+50 && !Input.GetKeyDown(Input.key.LEFT)) {
 		vx = 0;
 		x = x / 50 * 50;
@@ -197,17 +244,14 @@ void CSGame::Loop() {
 	if (map[static_cast<int>(x) / 50][y / 50 + 1] == 1 && y / 50 * 50 < y) {
 		vy = 0;
 		y = y / 50 * 50;
-	}
+	}*/
 	/*for (int i = 0; i != 16; ++i) {
 		for (int k = 0; k != 12; ++k) {
 			if (map[static_cast<int>(x)/50+1][y/50+1]!=1) {
-						}else{
-
+			}else{
 			}
 		}
 	}*/
-
-
 
 }
 
@@ -215,19 +259,18 @@ void CSGame::Draw() {
 	
 	
 	//Soldier
-	soldier.Draw();
 	
+	soldierGraph(x, y,vx<0);
 
 
 	//Bullet
 	for(int i=0;i!=10;++i){
-		DrawBox(killer.b[i].x, killer.b[i].y, killer.b[i].x + killer.b[i].width, killer.b[i].y + killer.b[i].hight, BLACK, true);
+		bulletGraph(killer.b[i].x, killer.b[i].y);
 	/*	DrawGraph(700,300, killer.graph, FALSE);*/
 	}
 	
-	
 	//enemy_new
-	/*killer.Draw();*/
+	killer.Draw();
 	/*Rect r(300, 500, 400, 600);
 	r.Draw();*/
 
@@ -241,6 +284,7 @@ void CSGame::Draw() {
 			}
 		}
 	}
+	
 }
 
 
