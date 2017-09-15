@@ -2,7 +2,8 @@
 #include "Addons\COButton.h"
 
 void CSTitle::Start() {
-	SetBackGround("pic/title2.png");
+	
+	SetBackGround("pic/title_2.png");
 }
 
 void CSTitle::Loop() {
@@ -12,7 +13,7 @@ void CSTitle::Loop() {
 }
 
 void CSTitle::Draw() {
-
+	printf("—V‚×");
 }
 
 void CSTitle::End() {

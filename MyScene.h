@@ -55,13 +55,13 @@ struct Bullet {
 
 struct Killer{
 	int x, y;
-	Graph graph = "pic/tallet.png";
+	static Graph graph;
 	Bullet b[10];
 	const Rect size;
-	Killer(int x,int y):size(0,50,0,300),x(x),y(y){}
+	Killer(int x,int y):size(0,100,0,500),x(x),y(y){}
 	Killer():size(0, 50, 0, 300) {}
 	void Draw() {
-		graph(700,400-15-20);
+		graph(0,0);
 	}
 	void Set(int x, int y) {
 		this->x = x;
@@ -105,6 +105,8 @@ struct Shield {
 //	}
 //};
 
+
+
 struct RectFlag {
 	bool left, right, top, bottom;
 	RectFlag() {
@@ -126,7 +128,64 @@ struct RectFlag {
 		bottom = init;
 	}
 };
-		
+struct Tail {
+	bool flag;
+	double x;
+	double vx;
+	double y;
+	int gh;
+	static Graph graph;
+
+	
+	void Draw() {
+		graph(x, y);
+	}
+	void Set(int x, int y) {
+		this->x = x;
+		this->y = y;
+
+	}
+};
+struct Shot{
+	bool flag;
+	double x;
+	double vx;
+	double y;
+	int gh;
+	Rect size;
+	static Graph graph;
+	Shot(int x, int y) :size(0, 14, 0, 14), x(x), y(y) {}
+	Shot() :size(0, 14, 0, 14) {}
+	void Draw() {
+		graph(x, y);
+	}
+	void Set(int x, int y) {
+		this->x = x;
+		this->y = y;
+
+	}
+};
+
+struct EDro{
+	bool flag;
+	float x, y, vx, vy;
+	Rect size;
+	static Graph graph;
+	EDro(int x, int y) :size(0, 50, 0, 50), x(x), y(y) {}
+	EDro() :size(0, 50, 0,50) {}
+	void Draw() {
+		graph(x, y);
+	}
+	void Set(int x, int y) {
+		this->x = x;
+		this->y = y;
+
+	}
+};
+
+struct Debug {
+	bool bullet, eDro, level;
+};
 
 class CSGame :public CScene {
 	float x;
@@ -134,6 +193,7 @@ class CSGame :public CScene {
 	float vx;
 	float vy;
 	int kbt;
+	int count;
 	Killer killer;
 	int vxk;
 	float fric;
@@ -141,7 +201,7 @@ class CSGame :public CScene {
 	Bullet bullet;
 	Shield shield;
 	Graph block[3];
-	Graph soldierGraph,bulletGraph;
+	/*static Graph soldierGraph,bulletGraph;*/
 	int map[16][12];
 	int brx;
 	int bry;
@@ -149,14 +209,34 @@ class CSGame :public CScene {
 	int ix;
 	int iy;
 	bool landFlag;
-
+	Shot shot;
 	bool jumpFlag;
-	Rect j, r;
+	Rect j, r,eDroRectJ,eDroRectR,jb;
+	Shot pb[20];
+	EDro eDro;
+	Tail tail[20];
+	int edc;
+	int eDroRectBuf[4];
+	int bamboSscore,eDroScore;
+	int level;
+	int redLongLevel[10];
+	int redLong[10];
+	int font00;
+	int score;
+	int highScore;
+	std::string scoreString,highScoreString,levelString;
+	int jumpPower;
+	Debug debug;
+	bool hitFlag;
+	int playLevel;
+	
 
+	int bulletSpeed[10];
+	bool levelChangeFlag;
 	void Loop();
-	
+	int levelbuf, levelbuf2;
 	void Draw();
-	
+	int countbuf;
 	void End();
 
 };
@@ -169,6 +249,7 @@ class CSOver:public CScene{
 	void Loop();
 	
 	void Draw();
+	
 	
 	void End();
 };
