@@ -103,7 +103,8 @@ void CSGame::Start() {
 	fric=1.2;
 	fric_a=0.3;
 	for(int i=0;i!=10;++i){
-		killer.b[i].flag=false;
+		killer.b[i].flag = false; 
+			bullet[i].flag = false;
 	}
 		for (int i = 0; i != 20; ++i) {
 		pb[i].flag = false;
@@ -129,7 +130,7 @@ void CSGame::Start() {
 }
 
 void CSGame::Loop() {
-	
+	if (Input.GetKeyEnter(Input.key.L))score += 100;
 	level = 6;
 	if (score < 2000)playLevel = 5;
 	if (score < 1500)playLevel = 4;
@@ -245,7 +246,7 @@ void CSGame::Loop() {
 	if (x < 0) {
 		x = 0;
 	}
-	if (x + 50 > 800)x = 750;
+	if(x+50>800)x=750;
 	//Floor&Gravity
 	if (y + 50 >= 600) {
 		y = 550;
@@ -283,62 +284,69 @@ void CSGame::Loop() {
 		//Bullet
 	
 		
-			if (/*kbt == 1 &&*/ count % 30 == 1) {
+			if (count % 60 == 1) {
 
 				for (int i = 0; i != 10; ++i) {
 
-					if (killer.b[i].flag == false) {
+					if (bullet[i].flag == false) {
 						switch (playLevel)
 						{
 						case 0: {
-							redLong[i] = GetRand(30) + 20;
-							bulletSpeed[i] = GetRand(2) + 3;
+							bullet[i].width = GetRand(30) + 20;
+							bullet[i].vx = GetRand(2) + 3;
 							break;
 						}
 
 						case 1: {
-							redLong[i] = (30) + 50;
-							bulletSpeed[i] = GetRand(3) + 2;
+							bullet[i].width = (30) + 50;
+							bullet[i].vx = GetRand(3) + 2;
 							break;
 						}
 						case 2: {
-							redLong[i] = (50) + 50;
-							bulletSpeed[i] = GetRand(4) + 1;
+							bullet[i].width = (50) + 50;
+							bullet[i].vx = GetRand(4) + 2;
 							break;
 						}
 						case 3: {
-							redLong[i] = GetRand(100) + 100;
-							bulletSpeed[i] = GetRand(4) + 1;
+							bullet[i].width = GetRand(100) + 20;
+							bullet[i].vx = GetRand(4) + 1;
 							break;
 						}
 						case 4: {
-							redLong[i] = GetRand(150) + 100;
-							bulletSpeed[i] = GetRand(4) + 3;
+							bullet[i].width = GetRand(150) + 10;
+							bullet[i].vx = GetRand(4) + 3;
 							break;
 						}
 						case 5: {
-							redLong[i] = GetRand(280) + 20;
-							bulletSpeed[i] = GetRand(5) + 2;
+							bullet[i].width = GetRand(100) +100 ;
+							bullet[i].vx = GetRand(5) + 2;
 						}
 						case 6: {
-							redLong[i] = GetRand(300);
-							bulletSpeed[i] = GetRand(6) + 2;
+							bullet[i].width = GetRand(200)+10;
+							bullet[i].vx = GetRand(6) + 2;
 						}
 						default:
 							break;
 						}
-						killer.b[i].x = 800;
-						killer.b[i].y = 500;/*GetRand(150)+(600 - 200 - 20-150);*/
-						killer.b[i].vx = -bulletSpeed[i];
-						killer.b[i].flag = true;
+						bullet[i].x = 800;
+						bullet[i].y = 500;
+						bullet[i].flag = true;
+						break;
 					}
-					if (killer.b[i].x<0||killer.b[i].x>800) {
-						killer.b[i].flag = false;
-					}
+					
 
 				}
 			
 		}
+			
+			for (int i=0; i != 10; ++i) {
+				if (bullet[i].x+bullet[i].width < 0 || bullet[i].x>800) {
+					bullet[i].flag = false;
+				}
+			}
+			for (int i=0; i != 10; ++i) {
+				bullet[i].x -= bullet[i].vx;
+			}
 			
 			/*	for (int i=0; i != 10; i++) {
 					if (killer.b[i].flag) {
@@ -365,8 +373,22 @@ void CSGame::Loop() {
 		//BulletShield
 	
 		//BulletRect
-
-
+			for (int i = 0; i != 10; ++i) {
+				if (bullet[i].x +bullet[i].width> x&&x + 50 > bullet[i].x&&y+51>=500&&bullet[i].flag) {
+					x = RESET_X;
+					y = RESET_Y;
+					vx = 0;
+					eDro.flag = false;
+					killer.b[i].flag = false;
+					hitFlag = true;
+					Sleep(500);
+					hitFlag = false;
+					score = 0;
+					for (int j = 0; j != 10; ++j) {
+						bullet[j].flag = false;
+					}
+				}
+			}
 
 		//SoldierShot
 
@@ -423,7 +445,7 @@ void CSGame::Loop() {
 		}*/
 
 		//EDro
-		if (debug.eDro) {
+		
 
 			if (eDro.x + 50 < 0 || eDro.x > 800 || eDro.y > 600) {
 				eDro.flag = false;
@@ -520,7 +542,7 @@ void CSGame::Loop() {
 				Sleep(500);
 			}
 			for (int i = 0; i != 10; ++i) {
-				if (x + 25 >= killer.b[i].x&&x + 25 <= killer.b[i].x + redLong[i]) {
+				if (x + 25 >= bullet[i].x&&x + 25 <= bullet[i].x +bullet[i].width) {
 					score += 1;
 				}
 			}
@@ -528,8 +550,8 @@ void CSGame::Loop() {
 			if (levelChangeFlag) {
 				countbuf = count;
 			}
-		}
-	}
+		
+}
 
 void CSGame::Draw() {
 
@@ -621,8 +643,12 @@ void CSGame::Draw() {
 	for (int i = 0; i != 10; ++i) {
 
 
-		if (killer.b[i].flag)/*DxLib::DrawRotaGraph3(0, 0, 0,100, redLong[i] / 200, 1.0, 0, redGraph, true);*/DrawBox(killer.b[i].x, killer.b[i].y, killer.b[i].x + redLong[i], killer.b[i].y + 100, RED, true);
+		if (killer.b[i].flag)DrawBox(killer.b[i].x, killer.b[i].y, killer.b[i].x + redLong[i], killer.b[i].y + 100, RED, true);
 		/*	DrawGraph(700,300, killer.graph, FALSE);*/
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		if(bullet[i].flag)bullet[i].Draw();
 	}
 }
 

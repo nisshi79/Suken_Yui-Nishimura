@@ -39,12 +39,12 @@ void DrawBox(Rect size, int color, bool fill_flag);
 struct Bullet {
 	int x, y, vx;
 	bool flag;
-	static const int width = 15, hight = 15;
-	const Rect size;
-	Bullet(int left, int top) :size(left, left + width, top, top + hight) {}
-	Bullet() {}
+	int width , hight = 100;
 	void Draw() {
-		/*DrawBox(size.Add(x,y), BLACK, true);*/
+		DrawBox(x,y,x+width, y+hight,RED, true);
+	}
+	void Draw2() {
+		/*DxLib::DrawRotaGraph3(x, y, 0, 100, width / 200, 1.0, 0, redGraph, true);*/
 	}
 	void Set(int x,int y) {
 		this->x = x;
@@ -198,7 +198,7 @@ class CSGame :public CScene {
 	int vxk;
 	float fric;
 	float fric_a;
-	Bullet bullet;
+	Bullet bullet[10];
 	Shield shield;
 	Graph block[3];
 	/*static Graph soldierGraph,bulletGraph;*/
