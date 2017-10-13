@@ -39,17 +39,18 @@ void DrawBox(Rect size, int color, bool fill_flag);
 struct Bullet {
 	int x, y, vx;
 	bool flag;
+	static Graph graph;
 	int width , hight = 100;
 	void Draw() {
 		DrawBox(x,y,x+width, y+hight,RED, true);
 	}
 	void Draw2() {
-		/*DxLib::DrawRotaGraph3(x, y, 0, 100, width / 200, 1.0, 0, redGraph, true);*/
+		
+		DxLib::DrawRotaGraph3(x-100, y-100, 0, 150, width /100, 1.0, 0, graph, true);
 	}
 	void Set(int x,int y) {
 		this->x = x;
 		this->y = y;
-		
 	}
 };
 
@@ -152,8 +153,8 @@ struct Shot{
 	double vx;
 	double y;
 	int gh;
-	Rect size;
-	static Graph graph;
+	Rect size;	static Graph graph;
+
 	Shot(int x, int y) :size(0, 14, 0, 14), x(x), y(y) {}
 	Shot() :size(0, 14, 0, 14) {}
 	void Draw() {
@@ -174,7 +175,7 @@ struct EDro{
 	EDro(int x, int y) :size(0, 50, 0, 50), x(x), y(y) {}
 	EDro() :size(0, 50, 0,50) {}
 	void Draw() {
-		graph(x, y);
+		graph(x-50, y-50);
 	}
 	void Set(int x, int y) {
 		this->x = x;
@@ -204,6 +205,7 @@ class CSGame :public CScene {
 	/*static Graph soldierGraph,bulletGraph;*/
 	int map[16][12];
 	int brx;
+
 	int bry;
 	void Start();
 	int ix;
@@ -229,14 +231,19 @@ class CSGame :public CScene {
 	Debug debug;
 	bool hitFlag;
 	int playLevel;
+	bool levelupGraphFlag;
 	
-
 	int bulletSpeed[10];
+
+	int life;
+	int countbuf;
+	int countbuf2;
+
 	bool levelChangeFlag;
 	void Loop();
 	int levelbuf, levelbuf2;
 	void Draw();
-	int countbuf;
+	
 	void End();
 
 };

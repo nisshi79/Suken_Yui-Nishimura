@@ -10,6 +10,7 @@ Graph EDro::graph;
 Graph Shot::graph;
 Graph Killer::graph;
 Graph Tail::graph;
+Graph Bullet::graph;
 Graph soldierGraph;
 Graph bulletGraph;
 Graph EDroGraph;
@@ -19,6 +20,10 @@ Graph jDropGraph;
 Graph lightGraph;
 Graph redGraph;
 Graph backY, backB, backG, backR, backP;
+Graph dmgGraph;
+Graph heartGraph;
+
+
 bool HitRectRect(const Rect& r1, const Rect& r2) {
 	return r1.right > r2.left && r2.right > r1.left && r1.bottom > r2.top && r2.bottom > r1.top;
 }
@@ -60,15 +65,15 @@ void DrawBox(Rect size, int color, bool fill_flag){
 	DrawBox(size.left, size.top, size.right, size.bottom, color, fill_flag);
 }
 void CSGame::Start() {	
-	AddFontResourceEx("pic/ Reef.otf", FR_PRIVATE, NULL);
+	AddFontResourceEx("pic/Ikaros-Regular.otf", FR_PRIVATE, NULL);
 
 	debug.bullet = true;
 	debug.eDro = false;
 	debug.level = false;
-
+	life = 3;
 	levelChangeFlag = false;
 	SetFontSize(FONT_SIZE);
-	ChangeFont("Reef Bold");
+	ChangeFont("Ikaros-Regular");
 	redGraph = "pic/red.png";
 	lightGraph = "pic/light.png";
 	backG = "pic/green.jpg";
@@ -77,20 +82,21 @@ void CSGame::Start() {
 	backP = "pic/purple.jpg";
 	backR = "pic/red.jpg";
 	highScore = 0;
-	statusbarGraph = "pic/ui.png";
+	statusbarGraph = "pic/ui4.png";
 	x = 125;
 	y = 450;
 	vx = 0;
 	vy = 0;
 	j.Set(10,40, 0, 50);
 	jb.Set(10, 40, 10,40 );
-	Tail::graph = "pic/tail.png";
+	Tail::graph = "pic/tail2.png";
 	jumpFlag = false;
 	landFlag = true;
 	eDro.flag = false;
 	Shot::graph="pic/pb.png";
 	Killer::graph= "pic/robot.png";
-	EDro::graph = "pic/EDro.png";
+	EDro::graph = "pic/drone.png";
+	Bullet::graph = "pic/red.png";
 	/*debug.Regist("x", &x);
 	debug.Regist("y", &y);
 	debug.Regist("vx", &vx);
@@ -99,7 +105,11 @@ void CSGame::Start() {
 	bulletGraph = "pic/bamboo.png";
 	soldierGraph = "pic/j.png";
 	levelupGraph = "pic/levelup.png";
-	jDropGraph = "pic/jDrop_2.png";
+	jDropGraph = "pic/jDrop.png";
+	heartGraph = "pic/heart.png";
+	dmgGraph = "pic/dmg.png";
+
+
 	fric=1.2;
 	fric_a=0.3;
 	for(int i=0;i!=10;++i){
@@ -162,7 +172,7 @@ void CSGame::Loop() {
 		}
 	}
 	jumpPower = -20;
-	if (Input.GetKeyDown(Input.key.DOWN))jumpPower = -30;
+	if (Input.GetKeyDown(Input.key.DOWN))jumpPower = -20;
 	if (/*(Input.GetKeyEnter(Input.key.W)||Input.GetKeyDown(Input.key.UP)) &&*/ landFlag) {
 		vy = jumpPower;
 	}
@@ -256,7 +266,7 @@ void CSGame::Loop() {
 		vy += 0.5;
 	}
 
-	if (Input.GetKeyDown(Input.key.DOWN))vy += 1;
+	if (Input.GetKeyDown(Input.key.DOWN)&&x!=0)vy += 1;
 
 	//Tail
 	for (int i = 0; i != 20; ++i) {
@@ -298,31 +308,31 @@ void CSGame::Loop() {
 						}
 
 						case 1: {
-							bullet[i].width = (30) + 50;
-							bullet[i].vx = GetRand(3) + 2;
-							break;
-						}
-						case 2: {
-							bullet[i].width = (50) + 50;
+							bullet[i].width = (40) +10;
 							bullet[i].vx = GetRand(4) + 2;
 							break;
 						}
-						case 3: {
-							bullet[i].width = GetRand(100) + 20;
-							bullet[i].vx = GetRand(4) + 1;
+						case 2: {
+							bullet[i].width = (50) + 10;
+							bullet[i].vx = GetRand(3) + 4;
 							break;
 						}
-						case 4: {
-							bullet[i].width = GetRand(150) + 10;
+						case 3: {
+							bullet[i].width = GetRand(30) + 20;
 							bullet[i].vx = GetRand(4) + 3;
 							break;
 						}
+						case 4: {
+							bullet[i].width = GetRand(30) + 10;
+							bullet[i].vx = GetRand(5) + 2;
+							break;
+						}
 						case 5: {
-							bullet[i].width = GetRand(100) +100 ;
+							bullet[i].width = GetRand(50) +10 ;
 							bullet[i].vx = GetRand(5) + 2;
 						}
 						case 6: {
-							bullet[i].width = GetRand(200)+10;
+							bullet[i].width = GetRand(60)+10;
 							bullet[i].vx = GetRand(6) + 2;
 						}
 						default:
@@ -373,22 +383,11 @@ void CSGame::Loop() {
 		//BulletShield
 	
 		//BulletRect
-			for (int i = 0; i != 10; ++i) {
-				if (bullet[i].x +bullet[i].width> x&&x + 50 > bullet[i].x&&y+51>=500&&bullet[i].flag) {
-					x = RESET_X;
-					y = RESET_Y;
-					vx = 0;
-					eDro.flag = false;
-					killer.b[i].flag = false;
-					hitFlag = true;
-					Sleep(500);
-					hitFlag = false;
-					score = 0;
-					for (int j = 0; j != 10; ++j) {
-						bullet[j].flag = false;
-					}
-				}
-			}
+			
+			
+		
+
+		
 
 		//SoldierShot
 
@@ -454,7 +453,7 @@ void CSGame::Loop() {
 
 
 			}
-			if (eDro.flag == false && playLevel > 3) {
+			if (playLevel >= 3) {
 				edc += 1;
 				if (edc / 60 >= GetRand(3) + 2) {
 
@@ -523,7 +522,7 @@ void CSGame::Loop() {
 			//bulletrect
 			for (int i = 0; i != 10; ++i) {
 				killer.b[i].x += bulletSpeed[i];
-				if (x + 50 >= killer.b[i].x && x <= killer.b[i].x + redLong[i] && landFlag&& killer.b[i].flag == true || (HitRectRect(j.Add(x, y), eDroRectR) && eDro.flag)) {
+				/*if (x + 50 >= killer.b[i].x && x <= killer.b[i].x + redLong[i] && landFlag&& killer.b[i].flag == true || (HitRectRect(j.Add(x, y), eDroRectR) && eDro.flag)) {
 					x = RESET_X;
 					y = RESET_Y;
 					vx = 0;
@@ -533,14 +532,40 @@ void CSGame::Loop() {
 					Sleep(500);
 					hitFlag = false;
 					score = 0;
+				}*/
+			}
+			for (int i = 0; i != 10; ++i) {
+				if (count-countbuf2 > 60) {
+					if (bullet[i].x + bullet[i].width > x + 10 && x + 40 > bullet[i].x&&y + 51 >= 500 && bullet[i].flag) {
+						countbuf2 = count;
+						/*Sleep(100);*/
+						life -= 1;
+					}
+
+					if (HitRectRect(j.Add(x, y), eDroRectR) && eDro.flag) {
+						life -= 1;
+						/*Sleep(100);*/
+						countbuf2 = count;
+					}
 				}
+				if (life == 0) {
+					x = RESET_X;
+					y = RESET_Y;
+					vx = 0;
+					eDro.flag = false;
+					killer.b[i].flag = false;
+					hitFlag = true;
+					Sleep(500);
+					hitFlag = false;
+					score = 0;
+					life = 3;
+					for (int j = 0; j != 10; ++j) {
+					bullet[j].flag = false;
+				}
+				}
+				
 			}
-			if (HitRectRect(j.Add(x, y), eDroRectR) && eDro.flag) {
-				x = RESET_X;
-				y = RESET_Y;
-				vx = 0;
-				Sleep(500);
-			}
+			
 			for (int i = 0; i != 10; ++i) {
 				if (x + 25 >= bullet[i].x&&x + 25 <= bullet[i].x +bullet[i].width) {
 					score += 1;
@@ -605,12 +630,15 @@ void CSGame::Draw() {
 
 	
 	if (Input.GetKeyDown(Input.key.DOWN)) {
-		jDropGraph(x, y, vy < 0 || Input.GetKeyDown(Input.key.LEFT));
+		jDropGraph(x-25, y-25, vy < 0 || Input.GetKeyDown(Input.key.LEFT));
 	}
 	else{
 		soldierGraph(x-25, y-25, vx < 0 || Input.GetKeyDown(Input.key.LEFT));
 	}	
 	//map
+	if (count - countbuf2 <= 60&&count%24<=12&&life!=3) {
+		dmgGraph(x, y);
+	}
 	for (int i = 0; i != 16; ++i) {
 		for (int k = 0; k != 12; ++k) {
 			int c = map[i][k];
@@ -631,14 +659,21 @@ void CSGame::Draw() {
 	}
 		statusbarGraph();
 	if (count % 30 > 15) {
-		DxLib::SetDrawBright(0, 0, 0);
+	/*	DxLib::SetDrawBlendMode(DX_BLENDMODE_INVSRC, 255);*/
+		DxLib::SetDrawBlendMode(DX_BLENDMODE_ADD,255);
+		levelupGraphFlag = false;
+	}
+	else {
+		levelupGraphFlag = true;
 	}
 	if (count - countbuf < 60&&playLevel>=1&&count>60)levelupGraph();
 	DxLib::SetDrawBright(255, 255, 255);
-	DrawFormatString(317,68,GetColor(73,58,244),"%d",score);
-	DrawFormatString(701, 64, GetColor(73, 58, 244), "%d",highScore);
-	SetFontSize(120);
-	DrawFormatString(14, 13, GetColor(244, 58, 58), "%d",playLevel);
+	DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	levelupGraph = "pic/levelup.png";
+	DrawFormatString(375,12,GetColor(/*73,58,244*/176,176,176),"%d",score);
+	DrawFormatString(630, 12, GetColor(/*19,183, 19*/176,176,176), "%d",highScore);
+	/*SetFontSize(120);*/
+	DrawFormatString(96, 12, GetColor(/*244, 58, 58*/176,176,176), "%d",playLevel);
 	SetFontSize(FONT_SIZE);
 	for (int i = 0; i != 10; ++i) {
 
@@ -650,6 +685,14 @@ void CSGame::Draw() {
 	{
 		if(bullet[i].flag)bullet[i].Draw();
 	}
+	
+	if (life >= 1) {
+		heartGraph(10, 100);
+	}
+	if (life >= 2) {
+		heartGraph(10, 100 + 80);
+	}
+	if (life == 3)heartGraph(10, 100 + 160);
 }
 
 
