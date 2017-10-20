@@ -232,16 +232,23 @@ class CSGame :public CScene {
 	bool hitFlag;
 	int playLevel;
 	bool levelupGraphFlag;
-	
+	int eDroSpeed;
 	int bulletSpeed[10];
-
+	int GameState;
+	bool jDropFlag;
 	int life;
 	int countbuf;
 	int countbuf2;
-
+	bool pause_oFlag, pause_kFlag, pause_mFlag;
 	bool levelChangeFlag;
 	void Loop();
 	int levelbuf, levelbuf2;
+	bool downFlag;
+
+
+
+
+
 	void Draw();
 	
 	void End();

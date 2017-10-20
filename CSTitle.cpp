@@ -3,13 +3,13 @@
 bool titlePlayFlag;
 Graph ppGraph;
 void CSTitle::Start() {
-	ppGraph = "pic/t_pp.png";
+	ppGraph = "pic/t_pp2.png";
 	titlePlayFlag = false;
-	SetBackGround("pic/title_3.png");
+	SetBackGround("pic/title_4.png");
 }
 
 void CSTitle::Loop() {
-	if (Input.GetKeyEnter(Input.key.X)) {
+	if (Input.GetKeyEnter(Input.key.RETURN)) {
 		titlePlayFlag = true;
 		Game.FlipScene(new CSGame(),Flip::FADE_OUT_IN);
 	}
