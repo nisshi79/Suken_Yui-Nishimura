@@ -116,10 +116,7 @@ void CSGame::Start() {
 	Killer::graph= "pic/robot.png";
 	EDro::graph = "pic/drone.png";
 	Bullet::graph = "pic/red.png";
-	/*debug.Regist("x", &x);
-	debug.Regist("y", &y);
-	debug.Regist("vx", &vx);
-	debug.Regist("vy", &vy);*/
+	
 	SetBackGround("pic/blue.jpg");
 	bulletGraph = "pic/bamboo.png";
 	soldierGraph = "pic/j.png";
@@ -226,16 +223,7 @@ void CSGame::Loop() {
 		//Speed
 		x += vx;
 		y += vy;
-		//for (int i = 0; i != 10; ++i) {
-		//	RectFlag f = { true,true,true,true };
-		//	if (i != 0) {
-		//		f.left = false;
-		//	}
-		//	if (i != 9) {
-		//		f.right = false;
-		//	}
-		//	HitMRectRect(x, y, vx, vy, j, b[i], f);
-		//}
+		
 
 		//blocks
 		RectFlag buf(false);
@@ -290,13 +278,7 @@ void CSGame::Loop() {
 			if (vx < -max)
 				vx = -max;
 		}
-		//Air
-		/*if (vx>0 && y+50>0) {
-			vx -= fric_a;
-		}
-		if (vx<0 && y+50>0) {
-			vx += fric_a;
-		}*/
+		
 
 
 		//Wall
@@ -410,37 +392,7 @@ void CSGame::Loop() {
 			bullet[i].x -= bullet[i].vx;
 		}
 
-		/*	for (int i=0; i != 10; i++) {
-				if (killer.b[i].flag) {
-				killer.b[i].x += killer.b[i].vx;
-			}
-		}*/
-		//kbt = 0;
-		//kbt = GetRand(20);
-		//if (kbt == 1 && count / 60 % 8>=5) {
-		//	for (int i = 0; i != 10; ++i) {
-		//		if (killer.b[i].flag == false) {
-		//			killer.b[i].x = 0;
-		//			killer.b[i].y = 600 - 100 - 16;/*GetRand(150)+(600 - 200 - 20-150);*/
-		//			killer.b[i].vx =10;
-		//			killer.b[i].flag = true;
-		//			break;
-		//		}
-		//		if (killer.b[i].x>800) {
-		//			killer.b[i].flag = false;
-		//		}
-
-		//	}
-		//}
-		//BulletShield
-
-		//BulletRect
-
-
-
-
-
-
+		
 		//SoldierShot
 
 		for (int i = 0; i != 20; ++i) {
@@ -469,31 +421,7 @@ void CSGame::Loop() {
 			}
 		}
 
-		//mudstop
-		/*if (map[static_cast<int>(x) / 50 +1][y/ 50] == 1) {
-			vx=0 ;
-
-		}*/
-		/*int tx = x - static_cast<int>(x) % 50;
-		if (map[static_cast<int>(x) / 50+1][y / 50] == 1 && static_cast<int>(x) %50<x+50 && !Input.GetKeyDown(Input.key.LEFT)) {
-			vx = 0;
-			x = x / 50 * 50;
-		}
-		if (map[static_cast<int>(x) / 50][y / 50] == 1 && x/50 * 50+50 > x && !Input.GetKeyDown(Input.key.RIGHT)) {
-			vx = 0;
-			x = x / 50 * 50;
-		}
-		if (map[static_cast<int>(x) / 50][y / 50 + 1] == 1 && y / 50 * 50 < y) {
-			vy = 0;
-			y = y / 50 * 50;
-		}*/
-		/*for (int i = 0; i != 16; ++i) {
-			for (int k = 0; k != 12; ++k) {
-				if (map[static_cast<int>(x)/50+1][y/50+1]!=1) {
-				}else{
-				}
-			}
-		}*/
+	
 
 		//eDro
 		switch (playLevel)
@@ -535,12 +463,7 @@ void CSGame::Loop() {
 				}
 				case 1: {
 
-					//eDro.x = GetRand(550) + 200;
-					//eDro.y = 0 - 50;
-					//eDro.vy = 10;
-					//eDro.vx = GetRand(10) + 1;
-					//eDro.flag = true;
-					//edc = 0;
+				
 					break;
 				}
 				case 2: {
@@ -587,17 +510,7 @@ void CSGame::Loop() {
 		//bulletrect
 		for (int i = 0; i != 10; ++i) {
 			killer.b[i].x += bulletSpeed[i];
-			/*if (x + 50 >= killer.b[i].x && x <= killer.b[i].x + redLong[i] && landFlag&& killer.b[i].flag == true || (HitRectRect(j.Add(x, y), eDroRectR) && eDro.flag)) {
-				x = RESET_X;
-				y = RESET_Y;
-				vx = 0;
-				eDro.flag = false;
-				killer.b[i].flag = false;
-				hitFlag = true;
-				Sleep(500);
-				hitFlag = false;
-				score = 0;
-			}*/
+			
 		}
 		for (int i = 0; i != 10; ++i) {
 			if (count - countbuf2 > INFINITY_TIME) {
@@ -720,10 +633,7 @@ void CSGame::Draw() {
 	
 
 	if (count <= TUTRIAL_TIME)tutrialGraph(0, 0);
-	//enemy_new
-	/*if (playLevel > 3)killer.Draw();*/
-	/*Rect r(300, 500, 400, 600);
-	r.Draw();*/
+	
 
 	
 	lightGraph();
@@ -779,21 +689,21 @@ void CSGame::Draw() {
 	DxLib::SetFontSize(60);
 	DrawFormatString(320+ 2, 4 + 2, BLACK, "%d", score);
 	DrawFormatString(620+2, 4+2, BLACK, "%d", highScore);
-	/*SetFontSize(120);*/
-	DrawFormatString(70+2, 4+2, BLACK/*GetColor(243, 165, 48)*/, "%d", playLevel);
+	
+	DrawFormatString(70+2, 4+2, BLACK, "%d", playLevel);
 	SetFontSize(FONT_SIZE);
 	levelupGraph = "pic/levelup.png";
-	DrawFormatString(320,4,GetColor(/*73,58,244*/243,165,48),"%d",score);
-	DrawFormatString(620, 4, GetColor(/*19,183, 19*/243, 165, 48), "%d",highScore);
-	/*SetFontSize(120);*/
-	DrawFormatString(70, 4, GetColor(/*244, 58, 58*/243, 165, 48), "%d",playLevel);
+	DrawFormatString(320,4,GetColor(243,165,48),"%d",score);
+	DrawFormatString(620, 4, GetColor(243, 165, 48), "%d",highScore);
+	
+	DrawFormatString(70, 4, GetColor(243, 165, 48), "%d",playLevel);
 	
 	for (int i = 0; i != 10; ++i) {
 
 
 		if (killer.b[i].flag)DrawBox(killer.b[i].x, killer.b[i].y, killer.b[i].x + redLong[i], killer.b[i].y + 100, GetColor(238, 64, 53)
 			, true);
-		/*	DrawGraph(700,300, killer.graph, FALSE);*/
+		
 	}
 	
 	for (int i = 0; i < 10; i++)
@@ -823,9 +733,7 @@ void CSGame::Draw() {
 	}
 	if (GameState == 1) {
 		
-		/*if (pause_kFlag)pause_kGraph(0,0);
-		if (pause_mFlag)pause_mGraph(0, 0);
-		if (pause_oFlag)pause_oGraph(0, 0);*/
+		
 	}
 
 

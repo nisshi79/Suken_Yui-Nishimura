@@ -76,7 +76,7 @@ struct Shield {
 	Shield(int x, int y):size(0,30,0,55),x(x),y(y){}
 	Shield():size(0,30,0,55){}
 	void Draw() {
-		/*DrawBox(size.Add(x, y), BLACK, true);*/
+		
 	}
 	void Set(int x,int y){
 		this->x = x;
@@ -88,23 +88,7 @@ struct Shield {
 	} 
 };
 
-//struct Soldier {
-//	int x, y;
-//	const Rect size;
-//	Soldier(int x,int y):size(0,50,0,50),x(x),y(y){}
-//	Soldier():size(0,50,0,50){}
-//		void Draw(){
-//			DrawGraph(x, y, soldierGraph, true);
-//	}
-//	void Set(int x, int y) {
-//		this->x=x;
-//		this->y=y;
-//		size.Add(x, y);
-//	}
-//	Rect rect(){
-//		size.Add(x,y);
-//	}
-//};
+
 
 
 
@@ -202,7 +186,7 @@ class CSGame :public CScene {
 	Bullet bullet[10];
 	Shield shield;
 	Graph block[3];
-	/*static Graph soldierGraph,bulletGraph;*/
+	
 	int map[16][12];
 	int brx;
 
