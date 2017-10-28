@@ -1,6 +1,7 @@
 #include "System.h"
 #include "../GameEngine/Input.h"
 #include "../Utility/Utility.h"
+#include "../GameEngine/Music.h"
 
 void suken::SystemSetting::SetWindowSize(int width, int height) {
 	windowWidth = width;

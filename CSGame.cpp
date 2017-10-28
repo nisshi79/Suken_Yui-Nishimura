@@ -70,6 +70,12 @@ void DrawBox(Rect size, int color, bool fill_flag){
 	DrawBox(size.left, size.top, size.right, size.bottom, color, fill_flag);
 }
 void CSGame::Start() {	
+	Music.Load(bgm,"pic/hurryup.mp3");
+	Music.Load(1, "pic/button79.mp3");
+	Music.Load(2, "pic/button80.mp3");
+	Music.Load(4, "pic/damage.wav");
+	Music.Load(5, "pic/over.wav");
+
 	AddFontResourceEx("pic/Ikaros-Regular.otf", FR_PRIVATE, NULL);
 	downFlag = false;
 	pause_kFlag = false;
@@ -158,28 +164,35 @@ void CSGame::Start() {
 
 void CSGame::Loop() {
 	//Pause
+
+	
 	
 	switch (GameState) {
 	
 	case 0: {
+		
+		Music.PlayLoop(bgm);
 		if (Input.GetKeyDown(Input.key.DOWN) || Input.GetKeyDown(Input.key.S)) {
 			downFlag = true;
 		}
 		else {
 			downFlag = false;
 		}
-		if (Input.GetKeyEnter(Input.key.P))GameState = 1;
+		if (Input.GetKeyEnter(Input.key.P)) {
+			GameState = 1;
+			Music.Play(1);
+		}
 		pause_kFlag = false;
 		pause_oFlag = false;
 		pause_mFlag = false;
 		if (Input.GetKeyEnter(Input.key.L))score += 100;
 		level = 6;
-		if (score < 2000)playLevel = 5;
-		if (score < 1500)playLevel = 4;
-		if (score < 1000)playLevel = 3;
-		if (score < 500)playLevel = 2;
-		if (score < 200)playLevel = 1;
-		if (score < 100)playLevel = 0;
+		if (score < 5000)playLevel = 5;
+		if (score < 3000)playLevel = 4;
+		if (score < 2000)playLevel = 3;
+		if (score < 1000)playLevel = 2;
+		if (score < 500)playLevel = 1;
+		if (score < 200)playLevel = 0;
 		levelbuf2 = playLevel;
 		if (levelbuf2 - levelbuf != 0) {
 			levelChangeFlag = true;
@@ -350,8 +363,8 @@ void CSGame::Loop() {
 						break;
 					}
 					case 2: {
-						bullet[i].width = (50) + 10;
-						bullet[i].vx = GetRand(3) + 4;
+						bullet[i].width = (30) + 50;
+						bullet[i].vx = GetRand(6) + 4;
 						break;
 					}
 					case 3: {
@@ -490,7 +503,7 @@ void CSGame::Loop() {
 			eDroSpeed = 10;
 		}
 		case 5: {
-			eDroSpeed = 12;
+			eDroSpeed = 16;
 		}
 		default:
 			break;
@@ -590,12 +603,14 @@ void CSGame::Loop() {
 					countbuf2 = count;
 					/*Sleep(100);*/
 					life -= 1;
+					Music.Play(4);
 				}
 
 				if (HitRectRect(j.Add(x, y), eDroRectR) && eDro.flag) {
 					life -= 1;
 					/*Sleep(100);*/
 					countbuf2 = count;
+					Music.Play(4);
 				}
 			}
 			if (life == 0) {
@@ -605,6 +620,7 @@ void CSGame::Loop() {
 				eDro.flag = false;
 				killer.b[i].flag = false;
 				hitFlag = true;
+				Music.Play(5);
 				Sleep(500);
 				hitFlag = false;
 				score = 0;
@@ -629,9 +645,12 @@ void CSGame::Loop() {
 		break;
  }
  case 1: {
+	 Music.StopLoop(0);
 	 if (Input.GetKeyEnter(Input.key.O)) {
 		 GameState = 0;
 		 pause_oFlag = true;
+		 Music.Play(2);
+		 Music.ReplayLoop(0);
 	 }
 	 if (Input.GetKeyDown(Input.key.K)) {
 		 Game.FlipScene(new CSTitle(), Flip::FADE_OUT_IN);
@@ -689,7 +708,7 @@ void CSGame::Draw() {
 
 	if (count <= TUTRIAL_TIME)tutrialGraph(0, 0);
 	//enemy_new
-	if (playLevel > 3)killer.Draw();
+	/*if (playLevel > 3)killer.Draw();*/
 	/*Rect r(300, 500, 400, 600);
 	r.Draw();*/
 
@@ -725,7 +744,6 @@ void CSGame::Draw() {
 	
 	for (int i = 0; i != 20; ++i) {
 		if (pb[i].flag)pb[i].Draw();
-		
 	}
 	for (int i = 0; i != 20; ++i) {
 		if (tail[i].flag)tail[i].Draw();
@@ -745,12 +763,18 @@ void CSGame::Draw() {
 	if (count - countbuf < 60&&playLevel>=1&&count>60)levelupGraph();
 	DxLib::SetDrawBright(255, 255, 255);
 	DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
-	levelupGraph = "pic/levelup.png";
-	DrawFormatString(320,7,GetColor(/*73,58,244*/243,165,48),"%d",score);
-	DrawFormatString(620, 7, GetColor(/*19,183, 19*/243, 165, 48), "%d",highScore);
+	DxLib::SetFontSize(60);
+	DrawFormatString(320+ 2, 4 + 2, BLACK, "%d", score);
+	DrawFormatString(620+2, 4+2, BLACK, "%d", highScore);
 	/*SetFontSize(120);*/
-	DrawFormatString(70, 7, GetColor(/*244, 58, 58*/243, 165, 48), "%d",playLevel);
+	DrawFormatString(70+2, 4+2, BLACK/*GetColor(243, 165, 48)*/, "%d", playLevel);
 	SetFontSize(FONT_SIZE);
+	levelupGraph = "pic/levelup.png";
+	DrawFormatString(320,4,GetColor(/*73,58,244*/243,165,48),"%d",score);
+	DrawFormatString(620, 4, GetColor(/*19,183, 19*/243, 165, 48), "%d",highScore);
+	/*SetFontSize(120);*/
+	DrawFormatString(70, 4, GetColor(/*244, 58, 58*/243, 165, 48), "%d",playLevel);
+	
 	for (int i = 0; i != 10; ++i) {
 
 

@@ -97,6 +97,9 @@
     <ClInclude Include="Map.h">
       <Filter>メイン ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="sukenlib\GameEngine\Music.h">
+      <Filter>sukenib\GameEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -126,9 +129,6 @@
     <ClCompile Include="sukenlib\GameEngine\Input.cpp">
       <Filter>sukenib\GameEngine</Filter>
     </ClCompile>
-    <ClCompile Include="sukenlib\WinMain.cpp">
-      <Filter>sukenib</Filter>
-    </ClCompile>
     <ClCompile Include="sukenlib\GameEngine\Object\Object.cpp">
       <Filter>sukenib\GameEngine\Object</Filter>
     </ClCompile>
@@ -154,5 +154,11 @@
       <Filter>メイン ファイル</Filter>
     </ClCompile>
     <ClCompile Include="MyScene.cpp" />
+    <ClCompile Include="sukenlib\WinMain.cpp">
+      <Filter>sukenib</Filter>
+    </ClCompile>
+    <ClCompile Include="sukenlib\GameEngine\Music.cpp">
+      <Filter>sukenib\GameEngine</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

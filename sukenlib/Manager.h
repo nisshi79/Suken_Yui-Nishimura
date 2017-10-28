@@ -13,6 +13,7 @@ namespace suken {
 	class CScene;
 
 	class CInput;
+	class CMusic;
 
 	//Object
 	class CObject;
@@ -64,6 +65,8 @@ namespace suken {
 	extern CSystem System;
 
 	extern CInput Input;
+
+	extern CMusic Music;
 
 	int Main(HINSTANCE hInstance, HINSTANCE hPreInst, LPSTR lpszCmdLine, int nCmdShow);
 }

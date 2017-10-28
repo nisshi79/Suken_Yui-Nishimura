@@ -14,6 +14,7 @@
 
 #include "sukenlib\GameEngine\Game.h"
 #include "sukenlib\GameEngine\Input.h"
+#include "sukenlib\GameEngine\Music.h"
 
 #include "sukenlib\GameEngine\Object\Object.h"
 #include "sukenlib\GameEngine\Object\Transform.h"

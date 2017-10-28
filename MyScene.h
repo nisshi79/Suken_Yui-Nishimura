@@ -246,6 +246,16 @@ class CSGame :public CScene {
 	bool downFlag;
 
 
+	enum {
+		bgm,
+		pauseIn,
+		pauseOut,
+		title,
+		damageSound,
+		overSound,
+		bgm2
+
+	};
 
 
 

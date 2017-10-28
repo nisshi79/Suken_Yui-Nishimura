@@ -18,6 +18,7 @@
     <ClInclude Include="sukenlib\GameEngine\Algolithm\Algorithm.h" />
     <ClInclude Include="sukenlib\GameEngine\Game.h" />
     <ClInclude Include="sukenlib\GameEngine\Input.h" />
+    <ClInclude Include="sukenlib\GameEngine\Music.h" />
     <ClInclude Include="sukenlib\GameEngine\Object\Object.h" />
     <ClInclude Include="sukenlib\GameEngine\Object\ObjectField.h" />
     <ClInclude Include="sukenlib\GameEngine\Object\Transform.h" />
@@ -43,6 +44,7 @@
     <ClCompile Include="sukenlib\DebugWindow\Debug.cpp" />
     <ClCompile Include="sukenlib\GameEngine\Game.cpp" />
     <ClCompile Include="sukenlib\GameEngine\Input.cpp" />
+    <ClCompile Include="sukenlib\GameEngine\Music.cpp" />
     <ClCompile Include="sukenlib\GameEngine\Object\Object.cpp" />
     <ClCompile Include="sukenlib\GameEngine\Scene.cpp" />
     <ClCompile Include="sukenlib\System\System.cpp" />
@@ -58,20 +60,21 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{441781E7-5FBE-45C8-8663-53BF60439229}</ProjectGuid>
     <RootNamespace>sukenLibObjective</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -89,11 +92,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\dxlib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\dxlib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -103,13 +106,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\dxlib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\dxlib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

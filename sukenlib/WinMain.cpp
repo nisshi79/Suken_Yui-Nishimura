@@ -13,6 +13,8 @@ suken::CGame suken::Game;
 
 suken::CInput suken::Input;
 
+suken::CMusic suken::Music;
+
 int suken::Main(HINSTANCE hInstance, HINSTANCE hPreInst, LPSTR lpszCmdLine, int nCmdShow) {
 
 	System.Start(hInstance, hPreInst, lpszCmdLine, nCmdShow);
