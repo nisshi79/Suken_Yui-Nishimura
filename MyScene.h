@@ -253,8 +253,9 @@ class CSGame :public CScene {
 		title,
 		damageSound,
 		overSound,
-		bgm2
-
+		bgm2,
+		levelup,
+		chose
 	};
 
 

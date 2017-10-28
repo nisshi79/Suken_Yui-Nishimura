@@ -3,10 +3,11 @@
 bool titlePlayFlag;
 Graph ppGraph;
 void CSTitle::Start() {
+	Music.Load(3,"pic/t.mp3");
 	ppGraph = "pic/t_pp2.png";
 	titlePlayFlag = false;
-	SetBackGround("pic/title_4.png");
-	Music.Load(3, "pic/title.mp3");
+	SetBackGround("pic/ui15.png");
+	
 }
 
 void CSTitle::Loop() {

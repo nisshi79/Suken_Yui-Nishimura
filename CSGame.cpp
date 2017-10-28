@@ -70,12 +70,13 @@ void DrawBox(Rect size, int color, bool fill_flag){
 	DrawBox(size.left, size.top, size.right, size.bottom, color, fill_flag);
 }
 void CSGame::Start() {	
+	Music.Load(8, "pic/SB570835.wav");
 	Music.Load(bgm,"pic/hurryup.mp3");
 	Music.Load(1, "pic/button79.mp3");
 	Music.Load(2, "pic/button80.mp3");
 	Music.Load(4, "pic/damage.wav");
 	Music.Load(5, "pic/over.wav");
-
+	Music.Load(7, "pic/soundlogo42.mp3");
 	AddFontResourceEx("pic/Ikaros-Regular.otf", FR_PRIVATE, NULL);
 	downFlag = false;
 	pause_kFlag = false;
@@ -185,7 +186,7 @@ void CSGame::Loop() {
 		pause_kFlag = false;
 		pause_oFlag = false;
 		pause_mFlag = false;
-		if (Input.GetKeyEnter(Input.key.L))score += 100;
+		/*if (Input.GetKeyEnter(Input.key.L))score += 100;*/
 		level = 6;
 		if (score < 5000)playLevel = 5;
 		if (score < 3000)playLevel = 4;
@@ -201,6 +202,7 @@ void CSGame::Loop() {
 			levelChangeFlag = false;
 		}
 		levelbuf = playLevel;
+		if (levelChangeFlag)Music.Play(7);
 		if (levelChangeFlag)life = 3;
 		count += 1;
 		//Move&Jump
@@ -311,7 +313,7 @@ void CSGame::Loop() {
 			vy += 0.5;
 		}
 
-		if (downFlag&& x != 0) {
+		if (downFlag&& x > -1) {
 			jDropFlag = true;
 			vy += 1;
 		}
@@ -655,16 +657,27 @@ void CSGame::Loop() {
 	 if (Input.GetKeyDown(Input.key.K)) {
 		 Game.FlipScene(new CSTitle(), Flip::FADE_OUT_IN);
 		 pause_kFlag = true;
+		 Music.Play(8);
 	 }
 	 if (Input.GetKeyEnter(Input.key.M)) {
 		 GameState = 2;
+		 Music.Play(8);
 	 }
 	 break;
  }
  case 2: {
-	if (Input.GetKeyEnter(Input.key.O))GameState = 0;
-	if (Input.GetKeyEnter(Input.key.P))GameState = 1;
-	if (Input.GetKeyDown(Input.key.K))Game.FlipScene(new CSTitle(), Flip::FADE_OUT_IN);
+	 if (Input.GetKeyEnter(Input.key.O)) {
+		 GameState = 0;
+		 Music.Play(8);
+	 }
+	 if (Input.GetKeyEnter(Input.key.P)) {
+		 GameState = 1;
+		 Music.Play(8);
+	 }
+	 if (Input.GetKeyDown(Input.key.K)) {
+		 Game.FlipScene(new CSTitle(), Flip::FADE_OUT_IN);
+		 Music.Play(8);
+	 }
 	 break;
  }
  default:
